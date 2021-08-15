@@ -5,6 +5,13 @@
 #include "cpp11/declarations.hpp"
 #include <R_ext/Visibility.h>
 
+// df.cpp
+sexp cpp_handle_xy(data_frame input, sexp handler_xptr);
+extern "C" SEXP _wkmike_cpp_handle_xy(SEXP input, SEXP handler_xptr) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_handle_xy(cpp11::as_cpp<cpp11::decay_t<data_frame>>(input), cpp11::as_cpp<cpp11::decay_t<sexp>>(handler_xptr)));
+  END_CPP11
+}
 // wk.cpp
 sexp cpp_bbox_handler_new();
 extern "C" SEXP _wkmike_cpp_bbox_handler_new() {
@@ -16,6 +23,7 @@ extern "C" SEXP _wkmike_cpp_bbox_handler_new() {
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_wkmike_cpp_bbox_handler_new", (DL_FUNC) &_wkmike_cpp_bbox_handler_new, 0},
+    {"_wkmike_cpp_handle_xy",        (DL_FUNC) &_wkmike_cpp_handle_xy,        2},
     {NULL, NULL, 0}
 };
 }
